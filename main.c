@@ -4,7 +4,7 @@ int main() {
     int data[] = {1,2,3,4,5,6,7,8,9};
     Matrix matrix; 
 
-    create_matrix(data, 3, 3);
+
     matrix = zeros_matrix(3,5);
     print_matrix(matrix);
     matrix = full_matrix(4, 8, 22);

@@ -5,8 +5,7 @@
 
 Matrix create_matrix(int *data, int n_rows, int n_cols){
 
-  if((n_rows*n_cols)!= (sizeof(*data)/sizeof(data[0])))
-  {
+  if((n_rows*n_cols)!= (sizeof(*data)/sizeof(data[0]))){
     printf("Error\n");
     exit(1);
     }
@@ -128,8 +127,19 @@ Matrix transpose(Matrix matrix){
 }
 
 Matrix reshape(Matrix matrix, int new_n_rows, int new_n_cols){
-  
+  if (new_n_cols*new_n_rows > sizeof(matrix.data) / sizeof(int) ){
+    printf("Error\n");
+    exit(1);
+  }
+
+  matrix.n_rows = new_n_rows;
+  matrix.n_cols = new_n_cols;
+  matrix.stride_rows = new_n_cols;
+
+  return matrix;
 }
+
+
 
 /*
 n_rows é o número de linhas da matriz.
