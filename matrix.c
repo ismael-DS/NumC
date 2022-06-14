@@ -25,7 +25,7 @@ Matrix create_matrix(int *data, int n_rows, int n_cols){
 
 Matrix zeros_matrix(int n_rows, int n_cols){
   int elements = n_rows * n_cols;
-  int *arr, count = 0;
+  int *arr;
   arr = calloc(elements, sizeof(int));
   
   Matrix matrix = {
@@ -35,6 +35,11 @@ Matrix zeros_matrix(int n_rows, int n_cols){
   .stride_rows = n_cols,
   .stride_cols = 1, 
   .offset = 0};
+
+  for(int i= 0;i < elements; i++)
+  {
+    printf("%d\n",arr[i]);
+    }
 
   return matrix;
   }
@@ -58,6 +63,10 @@ Matrix full_matrix(int n_rows, int n_cols, int value){
   .stride_cols = 1, 
   .offset = 0};
 
+  for(int i= 0;i < elements; i++)
+  {
+    printf("%d\n",arr[i]);
+  }
   return matrix;
 }
 
@@ -65,7 +74,8 @@ Matrix i_matrix(int n){
   
   int y = (int)sqrt(n);
   
-  if ((y*y)!= n){
+  if ((y*y)!= n)
+  {
     printf("Error\n");
     exit(1);
     }
@@ -85,32 +95,76 @@ Matrix i_matrix(int n){
     arr[i] = 1;
     }
 
+
   matrix.data = arr;
+ 
 
   return matrix;
 }
 
-// Funções para acessar Elementos:
+Matrix tile_matrix(Matrix matrix, int reps) {
 
-void print_matrix(Matrix matrix){
-    int count = 0;
+  Matrix matrix_rep = {.n_rows = matrix.n_rows * reps,
+                       .n_cols = matrix.n_cols,
+                       .stride_rows = matrix.n_cols,
+                       .stride_cols = 1,
+                       .offset = 0};
 
-    printf("{{");
-    for(int i= 0;i < matrix.n_cols * matrix.n_rows; i++) {
-    
-        count += 1;
-        if (count != matrix.n_cols) {    
-            printf("%d, ", matrix.data[i]);
-        }
-        else if (i != matrix.n_cols * matrix.n_rows -1) {
-            printf("%d},\n {", matrix.data[i]);
-            count = 0;
-        }     
-        else{
-            printf("%d}}\n", matrix.data[i]);
-        }
+  
+  int elements_og = matrix.n_rows * matrix.n_cols;
+  int elements_rep = elements_og * reps;
+  int *arr;
+  arr = calloc(elements_rep, sizeof(int));
+  int *p = &arr[0];
+  
+
+  for (int i = 0; i < elements_rep; i++) 
+  {
+    arr[i] = matrix.data[i];
+      if (i==elements_og)
+        arr[elements_og++] = *p++;
     }
+
+  matrix_rep.data = arr;
+
+  return matrix_rep;
 }
+
+int get_element(Matrix matrix, int ri, int ci){
+  int element;
+    if (ri == 1){
+      element = matrix.data[ci-1];}
+    else
+    {
+      element = matrix.data[(matrix.n_cols * (ri-1) + ci)-1];}
+
+  printf("%d",element);
+
+  return element;
+}
+
+void put_element(Matrix matrix, int ri, int ci, int elem)
+{
+  if (ri == 1){
+      matrix.data[ci-1] = elem;}
+    else
+    {
+      matrix.data[(matrix.n_cols * (ri-1) + ci)-1] = elem;}
+
+}
+
+void print_matrix(Matrix matrix)
+{    
+  int elements = matrix.n_cols * matrix.n_rows;
+   
+  for (int i = 0; i <elements;i++)
+  {
+    printf("%d\t", matrix.data[i]);
+    
+    if(!((i + 1) % matrix.n_cols))
+      putchar('\n');
+    }
+  }
 
 //Funções para manipulação de dimensões:
 
@@ -139,7 +193,27 @@ Matrix reshape(Matrix matrix, int new_n_rows, int new_n_cols){
   return matrix;
 }
 
-Matrix slice(Matrix a_matrix, int rs, int re, int cs, int ce);
+Matrix slice(Matrix a_matrix, int rs, int re, int cs, int ce){
+
+/*slice retorna um “recorte” da matriz original.
+• a_matrix é a matriz original
+• rs é o índice da linha inicial do recorte
+• re é o índice da linha final do recorte
+• cs é o índice da coluna inicial do recorte
+• ce é o índice da coluna final do recorte
+Dada a matriz:
+Matrix my_matrix;
+int data[] = {1,2,3,4,5,6,7,8,9};
+my_matrix = create_matrix(data, 3, 3);
+A chamada:
+my_matrix = slice(my_matrix, 0, 2, 1, 3);
+vai cortar my_matrix começando na linha 0 e indo até a linha de índice 1, e
+começando na coluna 1 e indo até a coluna de índice 2. É importante ressaltar
+que se re for 2 o índice final é 1, e se re for 3 o índice final é 2. Então, o índice
+final é sempre subtraído de 1.*/
+ 
+
+}
 
 // Funções de Agregação:
 
@@ -190,3 +264,5 @@ int argmax(Matrix matrix){
     
     return Nmax; 
 }
+
+// Funções Aritmeticas:
