@@ -36,11 +36,6 @@ Matrix zeros_matrix(int n_rows, int n_cols){
   .stride_cols = 1, 
   .offset = 0};
 
-  for(int i= 0;i < elements; i++)
-  {
-    printf("%d\n",arr[i]);
-    }
-
   return matrix;
   }
  
@@ -63,10 +58,6 @@ Matrix full_matrix(int n_rows, int n_cols, int value){
   .stride_cols = 1, 
   .offset = 0};
 
-  for(int i= 0;i < elements; i++)
-  {
-    printf("%d\n",arr[i]);
-  }
   return matrix;
 }
 
@@ -138,13 +129,10 @@ int get_element(Matrix matrix, int ri, int ci){
     {
       element = matrix.data[(matrix.n_cols * (ri-1) + ci)-1];}
 
-  printf("%d",element);
-
   return element;
 }
 
-void put_element(Matrix matrix, int ri, int ci, int elem)
-{
+void put_element(Matrix matrix, int ri, int ci, int elem){
   if (ri == 1){
       matrix.data[ci-1] = elem;}
     else
@@ -157,8 +145,7 @@ void print_matrix(Matrix matrix)
 {    
   int elements = matrix.n_cols * matrix.n_rows;
    
-  for (int i = 0; i <elements;i++)
-  {
+  for (int i = matrix.offset; i < elements; i++){
     printf("%d\t", matrix.data[i]);
     
     if(!((i + 1) % matrix.n_cols))
@@ -266,3 +253,48 @@ int argmax(Matrix matrix){
 }
 
 // Funções Aritmeticas:
+
+Matrix add(Matrix matrix_1, Matrix matrix_2){
+  if ((matrix_1.n_cols * matrix_1.n_rows) != (matrix_2.n_cols * matrix_2.n_rows)) {
+    printf("Error: As matrizes envolvidas na adição devem ser da mesma ordem \n");
+    exit(1);}
+
+  Matrix matrix_result = matrix_1;
+  
+  for (int i = 0; i < matrix_result.n_cols * matrix_result.n_rows; i++){
+    matrix_result.data[i] = matrix_1.data[i + matrix_1.offset] + matrix_2.data[i + matrix_2.offset];}
+  
+  return matrix_result;
+  }
+
+Matrix sub(Matrix matrix_1, Matrix matrix_2){
+  if ((matrix_1.n_cols * matrix_1.n_rows) != (matrix_2.n_cols * matrix_2.n_rows)) {
+    printf("Error: As matrizes envolvidas na subtração devem ser da mesma ordem \n");
+    exit(1);}
+  
+  for (int i = 0; i < matrix_result.n_cols * matrix_result.n_rows; i++){
+    matrix_result.data[i] = matrix_1.data[i + matrix_1.offset] - matrix_2.data[i + matrix_2.offset];}
+  
+  return matrix_result;
+  }
+
+Matrix mul(Matrix matrix_1, Matrix matrix_2){
+  if (matrix_1.n_cols != matrix_2.n_rows) {
+    printf("Error: As matrizes envolvidas nessa operação devem ter o numero de colunas da primeira igual ao numero de linhas da segunda\n");
+    exit(1);}
+  
+  Matrix matrix_result = {.n_rows = matrix_1.n_rows,
+                          .n_cols = matrix_2.n_cols,
+                          .stride_rows = matrix_2.n_cols,
+                          .stride_cols = 1,
+                          .offset = 0,
+                          .data = matrix_1.data};
+
+  for (int i = 0; i < matrix_result.n_cols * matrix_result.n_rows; i++){
+    matrix_result.data[i] = matrix_1.data[i + matrix_1.offset] - matrix_2.data[i + matrix_2.offset];}
+  
+  return matrix_result;
+
+}
+
+Matrix division(Matrix matrix_1, Matrix matrix_2);
