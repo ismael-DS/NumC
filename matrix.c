@@ -141,17 +141,25 @@ void put_element(Matrix matrix, int ri, int ci, int elem){
 
 }
 
-void print_matrix(Matrix matrix)
-{    
-  int elements = matrix.n_cols * matrix.n_rows;
+void print_matrix(Matrix matrix){    
+  int elements = matrix.n_cols * matrix.n_rows, i = matrix.offset, j = 0;
    
-  for (int i = matrix.offset; i < elements; i++){
-    printf("%d\t", matrix.data[i]);
+  printf("{{");
+  while (i != elements-1){
+    j++;
+    if (j == matrix.n_cols){
+      printf("%d}, \n {", matrix.data[i]);
+      j = 0;
+    } else printf("%d, ", matrix.data[i]);
     
-    if(!((i + 1) % matrix.n_cols))
-      putchar('\n');
+    i += matrix.stride_cols;
+
+    if(i > elements -1){
+      i -= elements -1;
     }
   }
+  printf("%d}}\n", matrix.data[elements-1]);
+}
 
 //Funções para manipulação de dimensões:
 
@@ -271,6 +279,8 @@ Matrix sub(Matrix matrix_1, Matrix matrix_2){
   if ((matrix_1.n_cols * matrix_1.n_rows) != (matrix_2.n_cols * matrix_2.n_rows)) {
     printf("Error: As matrizes envolvidas na subtração devem ser da mesma ordem \n");
     exit(1);}
+
+  Matrix matrix_result = matrix_1;
   
   for (int i = 0; i < matrix_result.n_cols * matrix_result.n_rows; i++){
     matrix_result.data[i] = matrix_1.data[i + matrix_1.offset] - matrix_2.data[i + matrix_2.offset];}
