@@ -145,7 +145,7 @@ void print_matrix(Matrix matrix){
   int elements = matrix.n_cols * matrix.n_rows, i = matrix.offset, j = 0;
    
   printf("{{");
-  while (i != elements-1){
+  while (i != elements + matrix.offset - 1){
     j++;
     if (j == matrix.n_cols){
       printf("%d}, \n {", matrix.data[i]);
@@ -189,6 +189,16 @@ Matrix reshape(Matrix matrix, int new_n_rows, int new_n_cols){
 }
 
 Matrix slice(Matrix a_matrix, int rs, int re, int cs, int ce){
+
+  Matrix result = { 
+  .data = a_matrix.data,
+  .n_rows = re - rs, 
+  .n_cols = ce - cs,
+  .stride_rows = a_matrix.stride_rows,
+  .stride_cols = a_matrix.stride_cols, 
+  .offset = ((a_matrix.stride_rows * rs) + cs)}; 
+
+  return result;
 
 /*slice retorna um “recorte” da matriz original.
 • a_matrix é a matriz original

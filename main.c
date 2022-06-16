@@ -8,6 +8,9 @@ int main() {
     matrix = create_matrix(data,3,3);
     print_matrix(matrix);
 
+    matriz = slice(matrix,0,2,1,3);
+    print_matrix(matriz);
+
     matriz = create_matrix(data,3,4);
     print_matrix(matriz);
 
