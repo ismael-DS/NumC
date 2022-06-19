@@ -10,12 +10,13 @@
 #include <stdlib.h>
 #include <math.h>
 
+// Funções pra criação de matrizes:
 Matrix create_matrix(int *data, int n_rows, int n_cols){
 
-  /*if((n_rows*n_cols)!= (sizeof(*data)/sizeof(data[0]))){
-    printf("Error\n");
+  if((n_rows*n_cols) > (sizeof(*data)*sizeof(int))){
+    printf("Error: There is not enough data to fill an matrix | Nao existem dados o suficiente para preencher a matriz\n");
     exit(1);
-  }*/
+  }
   
   
   Matrix matrix = {
@@ -72,9 +73,8 @@ Matrix i_matrix(int n){
   
   int y = (int)sqrt(n);
   
-  if ((y*y)!= n)
-  {
-    printf("Error\n");
+  if ((y*y)!= n){
+    printf("Error: Non-existent identity matrix | Matriz identidade inexistente\n");
     exit(1);
     }
   
@@ -96,7 +96,6 @@ Matrix i_matrix(int n){
 
   matrix.data = arr;
  
-
   return matrix;
 }
 
@@ -128,6 +127,7 @@ Matrix tile_matrix(Matrix matrix, int reps) {
   return matrix_rep;
 }
 
+// Funções para acessar elementos
 int get_element(Matrix matrix, int ri, int ci){
   int element;
     if (ri == 1){
@@ -142,8 +142,7 @@ int get_element(Matrix matrix, int ri, int ci){
 void put_element(Matrix matrix, int ri, int ci, int elem){
   if (ri == 1){
       matrix.data[ci-1] = elem;}
-    else
-    {
+    else {
       matrix.data[(matrix.n_cols * (ri-1) + ci)-1] = elem;}
 
 }
@@ -165,29 +164,28 @@ void print_matrix(Matrix matrix){
       i -= elements -1;
     }
   }
-  printf("%d}}\n", matrix.data[elements-1]);
-  putchar('\n');
+  printf("%d}}\n\n", matrix.data[elements-1]);
 }
 
 //Funções para manipulação de dimensões:
 
 Matrix transpose(Matrix matrix){
-  int transpor = matrix.n_rows;
+  int keep = matrix.n_rows;
 
   matrix.n_rows = matrix.n_cols;
-  matrix.n_cols = transpor;
-  transpor = matrix.stride_rows;
+  matrix.n_cols = keep;
+  keep = matrix.stride_rows;
   matrix.stride_rows = matrix.stride_cols;
-  matrix.stride_cols = transpor;
+  matrix.stride_cols = keep;
 
   return matrix;
 }
 
 Matrix reshape(Matrix matrix, int new_n_rows, int new_n_cols){
-  /*if (new_n_cols*new_n_rows > sizeof(matrix.data) / sizeof(int) ){
-    printf("Error\n");
+  if (new_n_cols*new_n_rows < sizeof(*matrix.data) / sizeof(int) ){
+    printf("Error: The new shape is not possible with the data provided | A nova configuração não é possivel com os dados fornecidos\n");
     exit(1);
-  } */ 
+  }
 
   matrix.n_rows = new_n_rows;
   matrix.n_cols = new_n_cols;
@@ -242,7 +240,7 @@ int min(Matrix matrix){
 int max(Matrix matrix){
     int Nmax = -999999, elements = matrix.n_cols * matrix.n_rows + matrix.offset;
 
-    for (int i = 0 ; i < elements; i++){
+    for (int i = matrix.offset ; i < elements; i++){
         if (matrix.data[i] > Nmax){
             Nmax = matrix.data[i];
         }
@@ -254,7 +252,7 @@ int max(Matrix matrix){
 int argmin(Matrix matrix){
     int Nmin = 999999, elements = matrix.n_cols * matrix.n_rows + matrix.offset;
 
-    for (int i = 0 ; i < elements; i++){
+    for (int i = matrix.offset; i < elements; i++){
         if (matrix.data[i] < Nmin){
             Nmin = i;
         }
@@ -266,7 +264,7 @@ int argmin(Matrix matrix){
 int argmax(Matrix matrix){
     int Nmax = -999999, elements = matrix.n_cols * matrix.n_rows + matrix.offset;;
 
-    for (int i = 0 ; i < elements; i++){
+    for (int i = matrix.offset; i < elements; i++){
         if (matrix.data[i] > Nmax){
             Nmax = i;
         }
@@ -279,10 +277,15 @@ int argmax(Matrix matrix){
 
 Matrix add(Matrix matrix_1, Matrix matrix_2){
   if ((matrix_1.n_cols * matrix_1.n_rows) != (matrix_2.n_cols * matrix_2.n_rows)) {
-    printf("Error: As matrizes envolvidas em operacoes aritmeticas devem ser da mesma ordem \n");
+    printf("Error: The matrices involved in arithmetic operations must be of the same order | As matrizes envolvidas em operacoes aritmeticas devem ser da mesma ordem \n");
     exit(1);}
 
-  Matrix matrix_result = matrix_1;
+  Matrix matrix_result =  {.n_rows = matrix_1.n_rows,
+                          .n_cols = matrix_2.n_cols,
+                          .stride_rows = matrix_2.n_cols,
+                          .stride_cols = 1,
+                          .offset = 0,
+                          .data = matrix_1.data};
   
   for (int i = 0; i < matrix_result.n_cols * matrix_result.n_rows; i++){
     matrix_result.data[i] = matrix_1.data[i + matrix_1.offset] + matrix_2.data[i + matrix_2.offset];}
@@ -292,10 +295,15 @@ Matrix add(Matrix matrix_1, Matrix matrix_2){
 
 Matrix sub(Matrix matrix_1, Matrix matrix_2){
   if ((matrix_1.n_cols * matrix_1.n_rows) != (matrix_2.n_cols * matrix_2.n_rows)) {
-    printf("Error: As matrizes envolvidas em operacoes aritmeticas devem ser da mesma ordem \n");
+    printf("Error: The matrices involved in arithmetic operations must be of the same order | As matrizes envolvidas em operacoes aritmeticas devem ser da mesma ordem \n");
     exit(1);}
 
-  Matrix matrix_result = matrix_1;
+  Matrix matrix_result = {.n_rows = matrix_1.n_rows,
+                          .n_cols = matrix_2.n_cols,
+                          .stride_rows = matrix_2.n_cols,
+                          .stride_cols = 1,
+                          .offset = 0,
+                          .data = matrix_1.data};
   
   for (int i = 0; i < matrix_result.n_cols * matrix_result.n_rows; i++){
     matrix_result.data[i] = matrix_1.data[i + matrix_1.offset] - matrix_2.data[i + matrix_2.offset];}
@@ -305,7 +313,7 @@ Matrix sub(Matrix matrix_1, Matrix matrix_2){
 
 Matrix mul(Matrix matrix_1, Matrix matrix_2){
   if ((matrix_1.n_cols * matrix_1.n_rows) != (matrix_2.n_cols * matrix_2.n_rows)) {
-    printf("Error: As matrizes envolvidas em operacoes aritmeticas devem ser da mesma ordem \n");
+    printf("Error: The matrices involved in arithmetic operations must be of the same order | As matrizes envolvidas em operacoes aritmeticas devem ser da mesma ordem \n");
     exit(1);}
   
   Matrix matrix_result = {.n_rows = matrix_1.n_rows,
@@ -324,7 +332,7 @@ Matrix mul(Matrix matrix_1, Matrix matrix_2){
 
 Matrix division(Matrix matrix_1, Matrix matrix_2){
   if ((matrix_1.n_cols * matrix_1.n_rows) != (matrix_2.n_cols * matrix_2.n_rows)) {
-    printf("Error: As matrizes envolvidas em operacoes aritmeticas devem ser da mesma ordem \n");
+    printf("Error: The matrices involved in arithmetic operations must be of the same order | As matrizes envolvidas em operacoes aritmeticas devem ser da mesma ordem \n");
     exit(1);}
 
   Matrix matrix_result = {.n_rows = matrix_1.n_rows,
@@ -336,7 +344,6 @@ Matrix division(Matrix matrix_1, Matrix matrix_2){
 
   for (int i = 0; i < matrix_result.n_cols * matrix_result.n_rows; i++){
     matrix_result.data[i] = matrix_1.data[i + matrix_1.offset] / matrix_2.data[i + matrix_2.offset];}
-  
 
   return matrix_result;
     
