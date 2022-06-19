@@ -311,7 +311,7 @@ Matrix mul(Matrix matrix_1, Matrix matrix_2){
                           .data = matrix_1.data};
 
   for (int i = 0; i < matrix_result.n_cols * matrix_result.n_rows; i++){
-    matrix_result.data[i] = matrix_1.data[i + matrix_1.offset] - matrix_2.data[i + matrix_2.offset];}
+    matrix_result.data[i] = matrix_1.data[i + matrix_1.offset] * matrix_2.data[i + matrix_2.offset];}
   
   return matrix_result;
 

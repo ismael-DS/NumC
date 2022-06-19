@@ -1,25 +1,41 @@
 #include <stdio.h>
 #include "matrix.h"
 
-int main() {
-    int data[] = {1,2,3,4,5,6,7,8,9,10,11,12}, n;
-    Matrix matrix, matriz, result; 
+int main() 
+{
+    int data[] = {1,2,3,4,5,6,7,8,9,10,11,12};
+    Matrix matrix_1, matrix_2, result; 
 
-    matrix = create_matrix(data,3,3);
-    print_matrix(matrix);
+    matrix_1 = create_matrix(data,3,3);
+    print_matrix(matrix_1);
 
-    matriz = slice(matrix,0,2,1,3);
-    print_matrix(matriz);
 
-    matriz = create_matrix(data,3,4);
-    print_matrix(matriz);
+    print_matrix(zeros_matrix(3,3));
+ 
 
-    matrix = transpose(matrix);
-    print_matrix(matrix);
+    print_matrix(full_matrix(2,3,5));
 
-    matriz = transpose(matriz);
-    print_matrix(matriz);
 
-    printf("Menor valor da Matriz: %d que esta no indice: %d\n", min(matrix), argmin(matrix));
-    printf("Maior valor da Matriz: %d que esta no indice: %d\n", max(matrix), argmax(matrix));
-} 
+    print_matrix(i_matrix(16));
+
+    print_matrix(tile_matrix(matrix_1,3));
+
+    printf("%d\n\n",get_element(matrix_1,2,3));
+
+    put_element(matrix_1,2,3,10);
+    print_matrix(matrix_1);
+
+
+    matrix_2 = create_matrix(data,3,4);
+    print_matrix(matrix_2);
+
+
+    print_matrix(transpose(matrix_2));
+    
+    matrix_2 = reshape(matrix_2,6,2);
+    print_matrix(matrix_2);
+
+    printf("Menor valor da Matriz: %d que esta no indice: %d\n", min(matrix_1), argmin(matrix_1));
+    printf("Maior valor da Matriz: %d que esta no indice: %d\n", max(matrix_1), argmax(matrix_1));
+
+}
