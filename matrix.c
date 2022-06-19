@@ -280,16 +280,20 @@ Matrix add(Matrix matrix_1, Matrix matrix_2){
     printf("Error: The matrices involved in arithmetic operations must be of the same order | As matrizes envolvidas em operacoes aritmeticas devem ser da mesma ordem \n");
     exit(1);}
 
+  int *arr, elements = matrix_1.n_cols * matrix_1.n_rows;
+  arr = calloc(elements, sizeof(int));
+
   Matrix matrix_result =  {.n_rows = matrix_1.n_rows,
                           .n_cols = matrix_2.n_cols,
                           .stride_rows = matrix_2.n_cols,
                           .stride_cols = 1,
-                          .offset = 0,
-                          .data = matrix_1.data};
+                          .offset = 0};
   
-  for (int i = 0; i < matrix_result.n_cols * matrix_result.n_rows; i++){
-    matrix_result.data[i] = matrix_1.data[i + matrix_1.offset] + matrix_2.data[i + matrix_2.offset];}
-  
+  for (int i = 0; i < elements; i++){
+    arr[i] = matrix_1.data[i + matrix_1.offset] + matrix_2.data[i + matrix_2.offset];}
+
+  matrix_result.data = arr; 
+
   return matrix_result;
   }
 
@@ -298,16 +302,20 @@ Matrix sub(Matrix matrix_1, Matrix matrix_2){
     printf("Error: The matrices involved in arithmetic operations must be of the same order | As matrizes envolvidas em operacoes aritmeticas devem ser da mesma ordem \n");
     exit(1);}
 
-  Matrix matrix_result = {.n_rows = matrix_1.n_rows,
+  int *arr, elements = matrix_1.n_cols * matrix_1.n_rows;
+  arr = calloc(elements, sizeof(int));
+
+  Matrix matrix_result =  {.n_rows = matrix_1.n_rows,
                           .n_cols = matrix_2.n_cols,
                           .stride_rows = matrix_2.n_cols,
                           .stride_cols = 1,
-                          .offset = 0,
-                          .data = matrix_1.data};
+                          .offset = 0};
   
-  for (int i = 0; i < matrix_result.n_cols * matrix_result.n_rows; i++){
-    matrix_result.data[i] = matrix_1.data[i + matrix_1.offset] - matrix_2.data[i + matrix_2.offset];}
-  
+  for (int i = 0; i < elements; i++){
+    arr[i] = matrix_1.data[i + matrix_1.offset] - matrix_2.data[i + matrix_2.offset];}
+
+  matrix_result.data = arr; 
+
   return matrix_result;
   }
 
@@ -315,36 +323,42 @@ Matrix mul(Matrix matrix_1, Matrix matrix_2){
   if ((matrix_1.n_cols * matrix_1.n_rows) != (matrix_2.n_cols * matrix_2.n_rows)) {
     printf("Error: The matrices involved in arithmetic operations must be of the same order | As matrizes envolvidas em operacoes aritmeticas devem ser da mesma ordem \n");
     exit(1);}
-  
-  Matrix matrix_result = {.n_rows = matrix_1.n_rows,
+
+  int *arr, elements = matrix_1.n_cols * matrix_1.n_rows;
+  arr = calloc(elements, sizeof(int));
+
+  Matrix matrix_result =  {.n_rows = matrix_1.n_rows,
                           .n_cols = matrix_2.n_cols,
                           .stride_rows = matrix_2.n_cols,
                           .stride_cols = 1,
-                          .offset = 0,
-                          .data = matrix_1.data};
-
-  for (int i = 0; i < matrix_result.n_cols * matrix_result.n_rows; i++){
-    matrix_result.data[i] = matrix_1.data[i + matrix_1.offset] * matrix_2.data[i + matrix_2.offset];}
+                          .offset = 0};
   
-  return matrix_result;
+  for (int i = 0; i < elements; i++){
+    arr[i] = matrix_1.data[i + matrix_1.offset] * matrix_2.data[i + matrix_2.offset];}
 
-}
+  matrix_result.data = arr; 
+
+  return matrix_result;
+  }
 
 Matrix division(Matrix matrix_1, Matrix matrix_2){
   if ((matrix_1.n_cols * matrix_1.n_rows) != (matrix_2.n_cols * matrix_2.n_rows)) {
     printf("Error: The matrices involved in arithmetic operations must be of the same order | As matrizes envolvidas em operacoes aritmeticas devem ser da mesma ordem \n");
     exit(1);}
 
-  Matrix matrix_result = {.n_rows = matrix_1.n_rows,
+  int *arr, elements = matrix_1.n_cols * matrix_1.n_rows;
+  arr = calloc(elements, sizeof(int));
+
+  Matrix matrix_result =  {.n_rows = matrix_1.n_rows,
                           .n_cols = matrix_2.n_cols,
                           .stride_rows = matrix_2.n_cols,
                           .stride_cols = 1,
-                          .offset = 0,
-                          .data = matrix_1.data};
+                          .offset = 0};
+  
+  for (int i = 0; i < elements; i++){
+    arr[i] = matrix_1.data[i + matrix_1.offset] / matrix_2.data[i + matrix_2.offset];}
 
-  for (int i = 0; i < matrix_result.n_cols * matrix_result.n_rows; i++){
-    matrix_result.data[i] = matrix_1.data[i + matrix_1.offset] / matrix_2.data[i + matrix_2.offset];}
+  matrix_result.data = arr; 
 
   return matrix_result;
-    
-}
+  }
