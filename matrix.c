@@ -166,6 +166,7 @@ void print_matrix(Matrix matrix){
     }
   }
   printf("%d}}\n", matrix.data[elements-1]);
+  putchar('\n');
 }
 
 //Funções para manipulação de dimensões:

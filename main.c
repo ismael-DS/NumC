@@ -9,39 +9,40 @@
 #include "matrix.h"
 
 int main() {
-    int data[] = {1,2,3,4,5,6,7,8,9,10,11,12}, n;
-    Matrix matrix1, matrix2, matrix3, matrix4, matrix5, result; 
+    int data[] = {1,2,3,4,5,6,7,8,9,10,11,12};
+    Matrix matrix_1, matrix_2, result; 
 
-    matrix1 = create_matrix(data, 3, 4);
-    print_matrix(matrix1);
-    matrix2 = i_matrix(16);
-    print_matrix(matrix2);
-    matrix3 = full_matrix(3, 3, 10);
-    print_matrix(matrix3);
-    matrix4 = zeros_matrix(4, 4);
-    print_matrix(matrix4);
-    matrix5 = tile_matrix(matrix1, 3);
-    print_matrix(matrix5);
+    matrix_1 = create_matrix(data,3,3);
+    print_matrix(matrix_1);
 
-    printf("\n%d\n", get_element(matrix1, 2, 3));
-    put_element(matrix1, 2, 3, 11);
-    print_matrix(matrix1);
+    print_matrix(zeros_matrix(3,3));
 
-    result = transpose(matrix1);
-    print_matrix(result);
-    result = reshape(matrix1, 3, 3);
-    print_matrix(result);
-    print_matrix(matrix1);
-    print_matrix(slice(matrix1, 0, 2, 0, 2));
+    print_matrix(full_matrix(2,3,5));
 
-    printf("Menor valor da Matriz: %d que esta no indice: %d\n", min(result), argmin(result));
-    printf("Maior valor da Matriz: %d que esta no indice: %d\n", max(result), argmax(result));
+    print_matrix(i_matrix(16));
 
-    matrix4 = add(matrix3, result);
-    print_matrix(matrix4);
-    matrix5 = sub(matrix3, result);
-    print_matrix(matrix5);
-    matrix3 = division(matrix5, matrix4);
-    print_matrix(matrix3);
-    mul(matrix5, result);
-} 
+    print_matrix(tile_matrix(matrix_1,3));
+
+    printf("%d\n\n",get_element(matrix_1,2,3));
+
+    put_element(matrix_1,2,3,10);
+    print_matrix(matrix_1);
+
+    matrix_2 = create_matrix(data,3,4);
+    print_matrix(matrix_2);
+
+    print_matrix(slice(matrix_2, 0, 2, 0, 2));
+  
+    print_matrix(transpose(matrix_2));
+    
+    matrix_2 = reshape(matrix_2,6,2);
+    print_matrix(matrix_2);
+    
+    print_matrix(add(matrix_1, matrix_2));
+    print_matrix(sub(matrix_1, matrix_2));
+    print_matrix(division(matrix_1, matrix_2));
+    print_matrix(mul(matrix_1, matrix_2));
+  
+    printf("Menor valor da Matriz: %d que esta no indice: %d\n", min(matrix_1), argmin(matrix_1));
+    printf("Maior valor da Matriz: %d que esta no indice: %d\n", max(matrix_1), argmax(matrix_1));
+}
