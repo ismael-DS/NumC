@@ -1,3 +1,10 @@
+/**
+ * Projeto de Pogramação Estruturada
+ * 
+ * Professor: Igor Malheiros
+ * Alunos: Ismael M. Araujo (20210094680) && Marilia Gabriela T. da Silva (20210067065) 
+ * 
+ * **/
 typedef struct {
 int *data;
 int n_rows;
